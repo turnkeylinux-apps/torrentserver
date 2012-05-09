@@ -1,0 +1,11 @@
+{
+ "1" : {
+  "id" : 1,
+  "software" : "MLDonkey",
+  "host" : "127.0.0.1",
+  "port" : 4001,
+  "username" : "admin",
+  "password" : "turnkey"
+  },
+ "version" : "0.1.3"
+ }

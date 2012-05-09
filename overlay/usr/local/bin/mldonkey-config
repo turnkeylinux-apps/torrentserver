@@ -1,0 +1,39 @@
+#!/bin/bash -e
+
+usage() {
+    echo "configure mldonkey, webgmui, extplorer passwords"
+    echo "usage: $0 PASSWORD"
+    exit 1
+}
+
+if [ $# -ne "1" ]; then
+    usage
+fi
+
+PASSWORD=$1
+
+# calculate hashes
+MD4_HASH=$(echo -n $PASSWORD | openssl dgst -md4 | tr [a-z] [A-Z])
+MD5_HASH=$(echo -n $PASSWORD | md5sum | cut -d " " -f 1)
+
+# stop services (if executed manually)
+/etc/init.d/webgmui stop || true
+/etc/init.d/mldonkey-server stop || true
+sleep 3
+
+# configure mldonkey
+CONF=/var/lib/mldonkey/users.ini
+sed -i "s|user_pass =\(.*\)|user_pass = \"$MD4_HASH\"|" $CONF
+
+# configure webgmui
+CONF=/usr/local/lib/webgmui/webclients.json
+sed -i "s|\"password\(.*\)|\"password\" : \"$PASSWORD\"|" $CONF
+
+CONF=/usr/local/lib/webgmui/webusers.json
+sed -i "s|\"password\(.*\)|\"password\" : \"$MD5_HASH\",|" $CONF
+
+# configure extplorer users
+CONF=/var/www/extplorer/config/.htusers.php
+sed -i "s|\"admin\",\"\(.*\)\",\"/|\"admin\",\"$MD5_HASH\",\"/|" $CONF
+sed -i "s|\"guest\",\"\(.*\)\",\"/|\"guest\",\"$MD5_HASH\",\"/|" $CONF
+

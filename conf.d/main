@@ -1,0 +1,79 @@
+#!/bin/sh -ex
+
+STORAGE=/srv/storage
+PASSWORD=turnkey
+
+CONF=/etc/default/mldonkey-server
+sed -i "s|LAUNCH_AT_STARTUP=false|LAUNCH_AT_STARTUP=true|" $CONF
+
+CONF=/var/lib/mldonkey/downloads.ini
+sed -i "s|client_name =\(.*\)|client_name = $HOSTNAME|" $CONF
+cat >> $CONF<<EOF
+enable_overnet = true
+enable_kademlia = true
+enable_servers = true
+enable_bittorrent = true
+enable_donkey = true
+enable_opennap = true
+enable_soulseek = true
+enable_gnutella = true
+enable_gnutella2 = true
+enable_fasttrack = true
+enable_directconnect = true
+enable_fileTP = true
+http_bind_addr = "127.0.0.1"
+gui_bind_addr = "127.0.0.1"
+telnet_bind_addr = "127.0.0.1"
+file_completed_cmd = "/usr/local/bin/mldonkey_clamav"
+add_mail_brackets = true
+EOF
+
+# start and stop mldonkey to seed configuration
+/etc/init.d/mldonkey-server start
+while [ ! -e /var/run/mldonkey/mlnet.pid ]; do sleep 3; done
+/etc/init.d/mldonkey-server stop
+
+# link mldonkey dirs to storage
+for dir in incoming shared temp; do
+    mv /var/lib/mldonkey/$dir $STORAGE
+    ln -s $STORAGE/$dir /var/lib/mldonkey/$dir
+done
+
+# symlink mldonkey logfile (package bug?) and clean out
+chown mldonkey:mldonkey /var/log/mldonkey/mlnet.log
+ln -s /var/log/mldonkey/mlnet.log /var/lib/mldonkey/mlnet.log
+echo > /var/log/mldonkey/mlnet.log
+
+# configure web gmui
+LOCAL_SRC=/usr/local/src
+LOCAL_LIB=/usr/local/lib
+unzip $LOCAL_SRC/web-gmui*.zip -d $LOCAL_SRC
+cp $LOCAL_SRC/web-gmui*/web-gmui-linux32 /usr/local/bin
+
+gzip -d $LOCAL_LIB/webgmui/GeoIP.dat.gz
+
+cd /etc/init.d
+update-rc.d webgmui start 99 2 . stop 20 1 .
+
+rm -rf $LOCAL_SRC/web-gmui*
+
+# set passwords (mldonkey, webgmui, extplorer)
+/usr/local/bin/mldonkey-config $PASSWORD
+
+# configure clamav
+CONF=/etc/clamav/clamd.conf
+sed -i "s|ScanMail true|ScanMail false|" $CONF
+sed -i "s|LogSyslog false|LogSyslog true|" $CONF
+
+# configure stunnel
+CONF=/etc/default/stunnel4
+sed -i "s|ENABLED=0|ENABLED=1|" $CONF
+
+# tweak fileserver configuration
+sed -i "s|/var/www/extplorer|/var/www|" /etc/lighttpd/lighttpd.conf
+
+CONF=/etc/samba/smb.conf
+NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
+sed -i "s|netbios name = \(.*\)|netbios name = $NETBIOS_NAME|" $CONF
+sed -i "s|server string = \(.*\)|server string = $CREDIT_ANCHORTEXT|" $CONF
+

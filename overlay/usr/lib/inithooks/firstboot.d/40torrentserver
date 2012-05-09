@@ -1,0 +1,8 @@
+#!/bin/bash -e
+# set torrentserver related passwords
+
+. /etc/default/inithooks
+
+[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
+$INITHOOKS_PATH/bin/torrentserver.py --pass="$APP_PASS"
+

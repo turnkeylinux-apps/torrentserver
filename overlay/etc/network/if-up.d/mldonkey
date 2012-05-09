@@ -1,0 +1,20 @@
+#!/bin/sh -e
+# Copyright (c) 2009 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+
+# don't bother to restarting when lo is configured.
+if [ "$IFACE" = "lo" ]; then
+    exit 0
+fi
+
+# only restart mldonkey is not running
+if ! grep -q mlnet /proc/*/stat 2>/dev/null; then
+    /etc/init.d/mldonkey-server restart >/dev/null 2>&1 || true
+fi
+
+# only restart webgmui is not running
+if ! grep -q web-gmui-linux3 /proc/*/stat 2>/dev/null; then
+    /etc/init.d/webgmui restart >/dev/null 2>&1 || true
+fi
+
+exit 0
+

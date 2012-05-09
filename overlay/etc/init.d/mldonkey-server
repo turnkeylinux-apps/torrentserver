@@ -1,0 +1,154 @@
+#!/bin/sh
+#
+# Original file :
+#    Written by Miquel van Smoorenburg <miquels@cistron.nl>.
+#    Modified for Debian GNU/Linux
+#    by Ian Murdock <imurdock@gnu.ai.mit.edu>.
+#
+# Version:  @(#)skeleton  1.9.1  08-Apr-2002  miquels@cistron.nl
+#
+#
+# This file has been rewritten by Sylvain Le Gall <gildor@debian.org>
+# and Samuel Mimram <smimram@debian.org> for the mldonkey package.
+#
+### BEGIN INIT INFO
+# Provides:          mldonkey-server
+# Required-Start:    $network
+# Required-Stop:     $network
+# Should-Start:      $local_fs
+# Should-Stop:       $local_fs
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Server for the mldonkey peer-to-peer downloader.
+# Description:       Server for the mldonkey peer-to-peer downloader.
+### END INIT INFO
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+NAME=mlnet
+EXEC=/usr/bin/$NAME
+DESC="MLDonkey"
+CONFIG=/etc/default/mldonkey-server
+PIDDIR=/var/run/mldonkey
+PIDFILE=$PIDDIR/$NAME.pid
+LOGFILE=/var/log/mldonkey/mldonkey-server.log
+SERVERLOG=/var/log/mldonkey/mlnet.log
+
+test -e $CONFIG || exit 0
+
+set -e
+
+Warn ()
+{
+    echo "$*" >&2
+}
+
+Error ()
+{
+    code=$1
+    shift
+
+    echo "."
+    Warn "$DESC: $NAME [ERROR] $@"
+    exit $code
+}
+
+StartErrorCheck ()
+{
+    if [ -f "$SERVERLOG" ] && tail -n 2 "$SERVERLOG" | grep -qi 'aborting' ; then
+        Warn "$DESC: $NAME [ERROR] server start error"
+        tail --verbose $SERVERLOG
+        exit 1
+    fi
+}
+
+. $CONFIG
+
+# Look for the default locale
+if [ -f "/etc/default/locale" ]; then
+  . /etc/default/locale
+  export LANG
+fi
+
+# /var/run might be on tempfs, see #354701.
+if [ ! -d /var/run/mldonkey ]; then
+    mkdir -m 755 /var/run/mldonkey
+fi
+if [ ! -d /var/log/mldonkey ]; then
+    mkdir -m 755 /var/log/mldonkey
+fi
+if [ -n "$MLDONKEY_USER" ] && [ -n "$MLDONKEY_GROUP" ]; then
+    chown $MLDONKEY_USER:$MLDONKEY_GROUP /var/run/mldonkey
+    chown $MLDONKEY_USER:$MLDONKEY_GROUP /var/log/mldonkey
+fi
+
+WRAPPER_OPTIONS=""
+
+# Set configuration value, from CONFIG
+if [ -n "$MLDONKEY_USER" ] && [ -n "$MLDONKEY_GROUP" ]; then
+    WRAPPER_OPTIONS="$WRAPPER_OPTIONS --chuid $MLDONKEY_USER:$MLDONKEY_GROUP"
+fi
+
+if [ -n "$MLDONKEY_DIR" ]; then
+  WRAPPER_OPTIONS="$WRAPPER_OPTIONS --chdir $MLDONKEY_DIR"
+fi
+
+if [ -n "$MLDONKEY_GROUP" ]; then
+  WRAPPER_OPTIONS="$WRAPPER_OPTIONS --group $MLDONKEY_GROUP"
+fi
+
+if [ -n "$MLDONKEY_UMASK" ]; then
+  WRAPPER_OPTIONS="$WRAPPER_OPTIONS --umask $MLDONKEY_UMASK"
+fi
+
+if [ -n "$MLDONKEY_NICENESS" ]; then
+  WRAPPER_OPTIONS="$WRAPPER_OPTIONS --nicelevel $MLDONKEY_NICENESS"
+fi
+
+case "$1" in
+  start|force-start)
+    echo -n "Starting $DESC: $NAME"
+
+    if [ "x$LAUNCH_AT_STARTUP" != "xtrue" ] && [ "x$1" = "xstart" ]; then
+      Error 0 "configuration file prevent $NAME to be started (use force-start)."
+    fi
+
+    if [ -z "$MLDONKEY_DIR" ] || [ ! -d "$MLDONKEY_DIR" ]; then
+      if [ -z "$MLDONKEY_DIR" ]; then
+        MLDONKEY_DIR="(unset)"
+      fi
+      Error 1 "$MLDONKEY_DIR is not a valid directory."
+    fi
+
+    if [ ! -f "$MLDONKEY_DIR/downloads.ini" ]; then
+      Error 1 "$MLDONKEY_DIR/downloads.ini is not a valid file."
+    fi
+
+    USER=`/usr/bin/stat --format="%U" "$MLDONKEY_DIR/downloads.ini"`
+    WRAPPER_OPTIONS="$WRAPPER_OPTIONS --user $USER"
+
+    start-stop-daemon --start $WRAPPER_OPTIONS \
+    --pidfile $PIDFILE --background --exec $EXEC \
+    -- -log_file $SERVERLOG -pid $PIDDIR 2>&1
+
+    StartErrorCheck
+
+    echo "."
+  ;;
+
+  stop)
+    echo -n "Stopping $DESC: $NAME"
+    start-stop-daemon --stop --oknodo --pidfile $PIDFILE --retry 30
+    echo "."
+  ;;
+
+  force-reload|restart)
+    $0 stop
+    $0 start
+  ;;
+
+  *)
+    Error 1 "Usage: $0 {start|stop|restart|force-reload|force-start}"
+  ;;
+esac
+
+exit 0
