@@ -7,7 +7,7 @@ CONF=/etc/default/mldonkey-server
 sed -i "s|LAUNCH_AT_STARTUP=false|LAUNCH_AT_STARTUP=true|" $CONF
 
 CONF=/var/lib/mldonkey/downloads.ini
-sed -i "s|client_name =\(.*\)|client_name = $HOSTNAME|" $CONF
+sed -i "s|client_name=\(.*\)|client_name=$HOSTNAME|" $CONF
 cat >> $CONF<<EOF
 enable_overnet = true
 enable_kademlia = true
@@ -39,9 +39,7 @@ for dir in incoming shared temp; do
     ln -s $STORAGE/$dir /var/lib/mldonkey/$dir
 done
 
-# symlink mldonkey logfile (package bug?) and clean out
-chown mldonkey:mldonkey /var/log/mldonkey/mlnet.log
-ln -s /var/log/mldonkey/mlnet.log /var/lib/mldonkey/mlnet.log
+# clean out logfile
 echo > /var/log/mldonkey/mlnet.log
 
 # configure web gmui
@@ -49,15 +47,11 @@ LOCAL_SRC=/usr/local/src
 LOCAL_LIB=/usr/local/lib
 unzip $LOCAL_SRC/web-gmui*.zip -d $LOCAL_SRC
 cp $LOCAL_SRC/web-gmui*/web-gmui-linux32 /usr/local/bin
-
 gzip -d $LOCAL_LIB/webgmui/GeoIP.dat.gz
-
-cd /etc/init.d
 update-rc.d webgmui start 99 2 . stop 20 1 .
-
 rm -rf $LOCAL_SRC/web-gmui*
 
-# set passwords (mldonkey, webgmui, extplorer)
+# set passwords (mldonkey, webgmui)
 /usr/local/bin/mldonkey-config $PASSWORD
 
 # configure clamav
