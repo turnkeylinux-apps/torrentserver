@@ -70,18 +70,18 @@
 
             <div id="tips">
                 <div class="fragment-content">
-                    <h2>TorrentServer Handler</h2>
+                    <h2>Browser Extensions</h2>
                     <div class="icon">
-                    <a href="https://addons.mozilla.org/en-US/firefox/addon/14043/">
+                    <a href="http://www.turnkeylinux.org/docs/torrentserver/browserextensions/">
                     <img src="/images/tsh64.png"/></a>
                     </div>
-                    <p>This Firefox extension lets you simply click on a download
-                    link (torrent, ed2k, magnet, sigdat) or <i>right-click ->
-                    Save with TorrentServer</i> any download link from 
-                    within Firefox and have it automatically submitted
-                    to the Torrent Server for download.</p>
-                    <a href="https://addons.mozilla.org/en-US/firefox/addon/14043/">
-                    Get it here</a>
+                    <p>Installing a compatible extension in your browser
+                    adds the capability to simply click on a download
+                    link (torrent, ed2k, magnet, sigdat) or
+                    <i>right-click -> Save with TorrentServer</i> any
+                    download link and have it automatically submitted to
+                    the Torrent Server for download.</p>
+                    <a href="http://www.turnkeylinux.org/docs/torrentserver/browserextensions/">Get them here</a>
 
                     <h2>Router/Firewall configuration</h2>
                     <p>TurnKey Torrent Server listens on certain ports, and
