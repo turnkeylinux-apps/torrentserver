@@ -69,8 +69,8 @@ sed -i "s|LogSyslog false|LogSyslog true|" $CONF
 CONF=/etc/default/stunnel4
 sed -i "s|ENABLED=0|ENABLED=1|" $CONF
 
-# tweak fileserver configuration
-sed -i "s|/var/www/extplorer|/var/www|" /etc/lighttpd/lighttpd.conf
+# files symlink to ajaxplorer
+ln -s /var/www/ajaxplorer /var/www/files
 
 CONF=/etc/samba/smb.conf
 NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])

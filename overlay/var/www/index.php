@@ -54,7 +54,7 @@
                     </div>
                     <div>
                         <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>/extplorer"><img
+                        $_SERVER{'HTTP_HOST'}; ?>/files"><img
                         src="images/filemanager.png"/>File Manager</a>
                     </div>
 

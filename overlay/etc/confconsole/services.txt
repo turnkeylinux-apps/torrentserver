@@ -3,6 +3,6 @@ Web shell:     https://$ipaddr:12320
 Webmin:        https://$ipaddr:12321
 MLDonkey:      https://$ipaddr:12322
 Web-GMUI:      https://$ipaddr:12323
-File manager:  https://$ipaddr/extplorer
+File manager:  https://$ipaddr/files
 SMB/CIFS:      \\$ipaddr (ports 139/445)
 SSH/SFTP:      root@$ipaddr (port 22)
