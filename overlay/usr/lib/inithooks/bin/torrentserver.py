@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
-"""Configure password for mldonkey, webgmui, extplorer
+"""Configure admin password for mldonkey and webgmui
 
 Options:
     -p --pass=    if not provided, will ask interactively
@@ -41,7 +41,7 @@ def main():
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
             "Torrent Server Password",
-            "Enter new password for MLDonkey, WebGMUI and eXtplorer.")
+            "Enter new admin password for MLDonkey and WebGMUI.")
 
     command = ["/usr/local/bin/mldonkey-config", password]
     p = subprocess.Popen(command, stdin=PIPE, stdout=PIPE, shell=False)

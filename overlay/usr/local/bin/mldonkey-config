@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 usage() {
-    echo "configure mldonkey, webgmui, extplorer passwords"
+    echo "configure admin password for mldonkey and webgmui"
     echo "usage: $0 PASSWORD"
     exit 1
 }
@@ -31,9 +31,4 @@ sed -i "s|\"password\(.*\)|\"password\" : \"$PASSWORD\"|" $CONF
 
 CONF=/usr/local/lib/webgmui/webusers.json
 sed -i "s|\"password\(.*\)|\"password\" : \"$MD5_HASH\",|" $CONF
-
-# configure extplorer users
-CONF=/var/www/extplorer/config/.htusers.php
-sed -i "s|\"admin\",\"\(.*\)\",\"/|\"admin\",\"$MD5_HASH\",\"/|" $CONF
-sed -i "s|\"guest\",\"\(.*\)\",\"/|\"guest\",\"$MD5_HASH\",\"/|" $CONF
 
