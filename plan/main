@@ -17,6 +17,5 @@ postfix             /* mldonkey email support */
 webmin-postfix
 
 ftp
-curl
 wget
 
