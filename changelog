@@ -7,7 +7,7 @@ turnkey-torrentserver-12.1 (1) turnkey; urgency=low
     - Added USER_BASE_DRIVER to plugins multi-auth (required in new version).
     - Force SSL and set locale to en_US.UTF-8.
 
-  * Hardcoded component versions:
+  * Upstream source component versions:
 
     webgmui         0.1.3
     ajaxplorer      4.2.3
