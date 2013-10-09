@@ -1,7 +1,7 @@
 #!/bin/bash -e
 
 usage() {
-    echo "configure admin password for mldonkey and webgmui"
+    echo "configure admin password for mldonkey"
     echo "usage: $0 PASSWORD"
     exit 1
 }
@@ -12,23 +12,12 @@ fi
 
 PASSWORD=$1
 
-# calculate hashes
-MD4_HASH=$(echo -n $PASSWORD | openssl dgst -md4 | tr [a-z] [A-Z])
-MD5_HASH=$(echo -n $PASSWORD | md5sum | cut -d " " -f 1)
-
-# stop services (if executed manually)
-/etc/init.d/webgmui stop || true
+# stop service (if executed manually)
 /etc/init.d/mldonkey-server stop || true
 sleep 3
 
 # configure mldonkey
 CONF=/var/lib/mldonkey/users.ini
+MD4_HASH=$(echo -n $PASSWORD | openssl dgst -md4 | tr [a-z] [A-Z])
 sed -i "s|user_pass =\(.*\)|user_pass = \"$MD4_HASH\"|" $CONF
-
-# configure webgmui
-CONF=/usr/local/lib/webgmui/webclients.json
-sed -i "s|\"password\(.*\)|\"password\" : \"$PASSWORD\"|" $CONF
-
-CONF=/usr/local/lib/webgmui/webusers.json
-sed -i "s|\"password\(.*\)|\"password\" : \"$MD5_HASH\",|" $CONF
 

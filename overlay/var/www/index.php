@@ -34,13 +34,8 @@
                 <div class="fragment-content">
                     <div>
                         <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>:12323"><img
-                        src="images/download.png"/>Basic</a>
-                    </div>
-                    <div>
-                        <a href="https://<?php print
                         $_SERVER{'HTTP_HOST'}; ?>:12322"><img
-                        src="images/download.png"/>Advanced</a>
+                        src="images/download.png"/>MLDonkey</a>
                     </div>
                     <div>
                         <a href="https://<?php print

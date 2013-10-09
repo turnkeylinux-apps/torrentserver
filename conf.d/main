@@ -42,16 +42,7 @@ done
 # clean out logfile
 echo > /var/log/mldonkey/mlnet.log
 
-# configure web gmui
-LOCAL_SRC=/usr/local/src
-LOCAL_LIB=/usr/local/lib
-unzip $LOCAL_SRC/web-gmui*.zip -d $LOCAL_SRC
-cp $LOCAL_SRC/web-gmui*/web-gmui-linux32 /usr/local/bin
-gzip -d $LOCAL_LIB/webgmui/GeoIP.dat.gz
-update-rc.d webgmui start 99 2 . stop 20 1 .
-rm -rf $LOCAL_SRC/web-gmui*
-
-# set passwords (mldonkey, webgmui)
+# set mldonkey password
 /usr/local/bin/mldonkey-config $PASSWORD
 
 # configure clamav

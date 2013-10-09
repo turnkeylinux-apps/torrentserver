@@ -8,7 +8,7 @@ netcat
 
 clamav-daemon
 
-stunnel             /* ssl support for mldonkey and webgmui */
+stunnel             /* ssl support for mldonkey */
 
 libxml2-utils       /* used for broadcatching (xmllint) */
 xsltproc            /* used for broadcatching */
