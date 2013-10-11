@@ -19,11 +19,6 @@ and on top of that:
   localhost).
 - File sharing (`MLDonkey`_) configurations:
    
-   - Provide simpler web interface via `P2P-GUI`_
-      
-      - Installed from upstream binary to
-        /usr/local/bin/web-gmui-linux32
-
    - Anti-virus / malware scanning via `ClamAV`_.
       
       - Anti-virus signatures are auto-updated.
@@ -56,7 +51,7 @@ and on top of that:
    - Pre-configured repositories (storage, user home directory).
 
 -  Default storage directory: */srv/storage*
--  Includes mldonkey-passwd script to change mldonkey, P2P-GUI and
+-  Includes mldonkey-passwd script to change MLdonkey and
    AjaXplorer passwords::
 
        /usr/local/bin/mldonkey-passwd PASSWORD
@@ -78,7 +73,7 @@ Credentials *(passwords set at first boot)*
 -------------------------------------------
 
 -  Webmin, Webshell, SSH, Samba: username **root**
--  mldonkey/P2P-GUI: username **admin**
+-  MLdonkey: username **admin**
 -  Web based file manager (AjaXplorer):
    
    -  username **admin** (Local)
@@ -88,7 +83,6 @@ Credentials *(passwords set at first boot)*
 .. _Torrent Server handler: https://addons.mozilla.org/en-US/firefox/addon/14043
 .. _TurnKey Core: http://www.turnkeylinux.org/core
 .. _MLDonkey: http://en.wikipedia.org/wiki/MLDonkey
-.. _P2P-GUI: http://p2p-gui.sourceforge.net/
 .. _ClamAV: http://www.clamav.net/
 .. _broadcatching: http://en.wikipedia.org/wiki/Broadcatching
 .. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)

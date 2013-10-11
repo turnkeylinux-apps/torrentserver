@@ -1,12 +1,14 @@
 turnkey-torrentserver-13.0 (1) turnkey; urgency=low
 
-  * Please refer to turnkey-core's changelog for changes common to all
-    appliances, as well as the following git logs:
-    
-    - https://github.com/turnkeylinux/common
-    - https://github.com/turnkeylinux-apps/torrentserver
+  * Torrent Server:
 
- -- Alon Swartz <alon@turnkeylinux.org>  Tue, 06 Aug 2013 15:37:33 +0300
+    - Latest Debian Wheezy package versions of MLDonkey and ClamAV.
+    - Removed webgmui - only i386 supported [#128].
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Alon Swartz <alon@turnkeylinux.org>  Fri, 11 Oct 2013 11:23:03 +0300
 
 turnkey-torrentserver-12.1 (1) turnkey; urgency=low
 
