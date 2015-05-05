@@ -51,8 +51,15 @@ sed -i "s|ScanMail true|ScanMail false|" $CONF
 sed -i "s|LogSyslog false|LogSyslog true|" $CONF
 
 # configure stunnel
-CONF=/etc/default/stunnel4
-sed -i "s|ENABLED=0|ENABLED=1|" $CONF
+sed -i "s|ENABLED=0|ENABLED=1|" /etc/default/stunnel4
+
+cat >>/etc/stunnel/stunnel.conf<<EOF
+[mldonkey]
+accept  = 12322
+connect = 4080
+TIMEOUTclose = 0
+
+EOF
 
 # files symlink to ajaxplorer
 ln -s /var/www/ajaxplorer /var/www/files
