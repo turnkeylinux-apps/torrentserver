@@ -13,9 +13,6 @@ stunnel             /* ssl support for mldonkey */
 libxml2-utils       /* used for broadcatching (xmllint) */
 xsltproc            /* used for broadcatching */
 
-postfix             /* mldonkey email support */
-webmin-postfix
-
 ftp
 wget
 
