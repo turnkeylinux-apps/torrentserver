@@ -1,3 +1,18 @@
+turnkey-torrentserver-14.0 (1) turnkey; urgency=low
+
+  * Torrent Server:
+
+    - Changed from MLDonkey to rTorrent and from lighttpd to nginx.
+    - Latest Debian Wheezy package versions of rTorrent and ClamAV.
+    - Latest upstream version of ruTorrent (3.7).
+    - Uses tmux to keep rTorrent running.
+    - Removed FTP.
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Anton Pyrogovskyi <anton@turnkeylinux.org>  Sun, 6 Sep 2015 21:30:56 +0300
+
 turnkey-torrentserver-13.0 (1) turnkey; urgency=low
 
   * Torrent Server:
