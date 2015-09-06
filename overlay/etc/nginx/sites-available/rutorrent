@@ -1,0 +1,29 @@
+server {
+        listen 12322 default_server ssl;
+        listen [::]:12322 default_server ssl;
+
+        server_name localhost;
+        root /var/www/rutorrent;
+        index index.html;
+
+	include /etc/nginx/include/ssl;
+
+        location / {
+                auth_basic "ruTorrent";
+                auth_basic_user_file /etc/nginx/htpasswd;
+                try_files $uri $uri/ index.html =404;
+        }
+
+	location /RPC2 {
+		include scgi_params;
+		scgi_pass unix:/var/run/rtorrent/rpc.socket;
+		scgi_param SCRIPT_NAME /RPC2;
+	}
+
+        location ~ \.php$ {
+                fastcgi_index index.php;
+                include fastcgi.conf;
+
+                fastcgi_pass unix:/var/run/php5-fpm.sock;
+        }
+}
