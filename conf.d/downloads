@@ -1,0 +1,12 @@
+#!/bin/bash -ex
+
+dl() {
+    [ "$FAB_HTTP_PROXY" ] && PROXY="--proxy $FAB_HTTP_PROXY"
+    cd $2; curl -L -f -O $PROXY $1; cd -
+}
+
+SRC=/usr/local/src
+VERSION=3.7
+URL="https://dl.bintray.com/novik65/generic/ruTorrent-$VERSION.zip"
+
+dl $URL $SRC
