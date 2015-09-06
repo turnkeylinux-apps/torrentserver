@@ -1,0 +1,62 @@
+#!/bin/bash
+### BEGIN INIT INFO
+# Provides:          rtorrent
+# Required-Start:    $local_fs $remote_fs $network $syslog
+# Required-Stop:     $local_fs $remote_fs $network $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: Start/stop rtorrent daemon
+### END INIT INFO
+
+USER='rtorrent'
+PIDFILE='/var/run/rtorrent.pid'
+SOCKET='/var/run/rtorrent/rpc.socket'
+WD='/var/lib/rtorrent'
+TMUX='/usr/bin/tmux'
+
+delete_socket() {
+    if [[ -e $SOCKET ]]; then
+        rm -f $SOCKET
+    fi
+}
+
+case "$1" in
+    start)
+        echo "Starting rtorrent."
+        delete_socket
+        su - rtorrent -s /bin/bash -c "$TMUX new-session -c $WD -s rtorrent -n rtorrent -d rtorrent"
+        if [[ $? -ne 0 ]]; then
+            echo "Error: rtorrent failed to start."
+            exit 1
+        fi
+
+        sleep 1
+        chmod ug=rw,o= $SOCKET
+        chown rtorrent:www-data $SOCKET
+
+        echo "rtorrent started successfully."
+        ;;
+
+    stop)
+        echo "Stopping rtorrent."
+        su - rtorrent -s /bin/bash -c "$TMUX send-keys -t rtorrent C-q && tmux kill-session -t rtorrent"
+        if [[ $? -ne 0 ]]; then
+            echo "Error: failed to stop rtorrent process."
+            exit 1
+        fi
+        delete_socket
+        echo "rtorrent stopped successfully."
+        ;;
+
+    restart)
+        "$0" stop
+        sleep 1
+        "$0" start || exit 1
+        ;;
+
+    *)
+        echo "Usage: $0 [start|stop|restart]"
+        exit 1
+        ;;
+
+esac
