@@ -1,18 +1,13 @@
 #include <turnkey/base>
 #include <turnkey/samba>
-#include <turnkey/ajaxplorer>
+#include <turnkey/samba-dav>
 #include <turnkey/compression>
+#include <turnkey/nfs>
 
-mldonkey-server
 netcat
 
 clamav-daemon
+clamdscan
 
-stunnel             /* ssl support for mldonkey */
-
-libxml2-utils       /* used for broadcatching (xmllint) */
-xsltproc            /* used for broadcatching */
-
-ftp
-wget
-
+rtorrent
+tmux
