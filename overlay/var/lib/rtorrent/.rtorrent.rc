@@ -1,0 +1,22 @@
+bind             = 0.0.0.0
+port_range       = 51777-51780
+port_random      = yes
+scgi_local       = /var/run/rtorrent/rpc.socket
+
+directory        = /srv/storage/incoming
+session          = /var/lib/rtorrent/.session
+encoding_list    = UTF-8
+
+encryption       = allow_incoming,try_outgoing,enable_retry
+use_udp_trackers = yes
+tracker_numwant  = 250
+
+dht              = auto
+dht_port         = 6881
+peer_exchange    = yes
+
+schedule         = low_diskspace,5,60,close_low_diskspace=100M
+
+check_hash       = yes
+
+system.method.set_key = event.download.finished,clamav_scan,"execute=/usr/local/bin/clamav-scan,$d.get_base_path=$d.get_name="

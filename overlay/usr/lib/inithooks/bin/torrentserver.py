@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
-"""Configure admin password for mldonkey
+"""Configure admin password for ruTorrent
 
 Options:
     -p --pass=    if not provided, will ask interactively
@@ -41,13 +41,14 @@ def main():
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
             "Torrent Server Password",
-            "Enter new admin password for MLDonkey.")
+            "Enter new admin password for ruTorrent.")
 
-    command = ["/usr/local/bin/mldonkey-config", password]
-    p = subprocess.Popen(command, stdin=PIPE, stdout=PIPE, shell=False)
-    stderr = p.wait()
-    if stderr:
-        fatal(stderr)
+    command = ['openssl', 'passwd', '-apr1', password]
+
+    with open('/etc/nginx/htpasswd', 'w') as of:
+        of.write('admin:')
+        of.flush()
+        subprocess.call(command, stdin=PIPE, stdout=of, shell=False)
 
 if __name__ == "__main__":
     main()

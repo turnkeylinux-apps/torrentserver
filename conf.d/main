@@ -2,70 +2,48 @@
 
 STORAGE=/srv/storage
 PASSWORD=turnkey
+SRC=/usr/local/src
+WEBROOT=/var/www/rutorrent
 
-CONF=/etc/default/mldonkey-server
-sed -i "s|LAUNCH_AT_STARTUP=false|LAUNCH_AT_STARTUP=true|" $CONF
+# extract ruTorrent
+unzip $SRC/ruTorrent-*.zip -d $(dirname $WEBROOT)
+mv $(dirname $WEBROOT)/ruTorrent-master $WEBROOT
 
-CONF=/var/lib/mldonkey/downloads.ini
-sed -i "s|client_name=\(.*\)|client_name=$HOSTNAME|" $CONF
-cat >> $CONF<<EOF
-enable_overnet = true
-enable_kademlia = true
-enable_servers = true
-enable_bittorrent = true
-enable_donkey = true
-enable_opennap = true
-enable_soulseek = true
-enable_gnutella = true
-enable_gnutella2 = true
-enable_fasttrack = true
-enable_directconnect = true
-enable_fileTP = true
-http_bind_addr = "127.0.0.1"
-gui_bind_addr = "127.0.0.1"
-telnet_bind_addr = "127.0.0.1"
-file_completed_cmd = "/usr/local/bin/mldonkey_clamav"
-add_mail_brackets = true
-EOF
+# set up rtorrent user
+useradd -MUrd /var/lib/rtorrent -s /bin/false rtorrent
+chown -R rtorrent:rtorrent /var/lib/rtorrent
 
-# start and stop mldonkey to seed configuration
-/etc/init.d/mldonkey-server start
-while [ ! -e /var/run/mldonkey/mlnet.pid ]; do sleep 3; done
-/etc/init.d/mldonkey-server stop
+# set up rtorrent dirs
+usermod -aG users rtorrent
 
-# link mldonkey dirs to storage
-for dir in incoming shared temp; do
-    mv /var/lib/mldonkey/$dir $STORAGE
-    ln -s $STORAGE/$dir /var/lib/mldonkey/$dir
-done
+mkdir -p $STORAGE/incoming
+mkdir -p $STORAGE/quarantine
 
-# clean out logfile
-echo > /var/log/mldonkey/mlnet.log
+chown -R rtorrent:users $STORAGE/incoming
+chown -R rtorrent:users $STORAGE/quarantine
 
-# set mldonkey password
-/usr/local/bin/mldonkey-config $PASSWORD
+chown -R www-data:rtorrent /var/www/rutorrent/share
+
+mkdir /var/log/rtorrent
+chown rtorrent:rtorrent /var/log/rtorrent
+
+su - rtorrent -s /bin/bash -c 'mkdir .session'
+
+# configure ruTorrent
+sed -i 's|\(\$scgi_port =\) .*|\1 0;|; s|\(\$scgi_host =\) .*|\1 "unix:///var/run/rtorrent/rpc.socket";|' /var/www/rutorrent/conf/config.php
 
 # configure clamav
 CONF=/etc/clamav/clamd.conf
-sed -i "s|ScanMail true|ScanMail false|" $CONF
-sed -i "s|LogSyslog false|LogSyslog true|" $CONF
+sed -i 's|\(ScanMail\) true|\1 false|; s|\(LogSyslog\) false|\1 true|' $CONF
 
-# configure stunnel
-sed -i "s|ENABLED=0|ENABLED=1|" /etc/default/stunnel4
-
-cat >>/etc/stunnel/stunnel.conf<<EOF
-[mldonkey]
-accept  = 12322
-connect = 4080
-TIMEOUTclose = 0
-
-EOF
-
-# files symlink to ajaxplorer
-ln -s /var/www/ajaxplorer /var/www/files
-
+# configure samba
 CONF=/etc/samba/smb.conf
 NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
-sed -i "s|netbios name = \(.*\)|netbios name = $NETBIOS_NAME|" $CONF
-sed -i "s|server string = \(.*\)|server string = $CREDIT_ANCHORTEXT|" $CONF
+sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" $CONF
+sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" $CONF
 
+ln -s /etc/nginx/sites-available/rutorrent /etc/nginx/sites-enabled/rutorrent
+rm -f /etc/nginx/sites-enabled/default
+
+# initscript
+update-rc.d rtorrent defaults 99
