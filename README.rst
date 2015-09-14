@@ -61,8 +61,8 @@ Credentials *(passwords set at first boot)*
 -  Web based file manager (SambaDAV):
    -  username **root** (Samba)
 
-.. _TurnKey Core: http://www.turnkeylinux.org/core
+.. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _ClamAV: http://www.clamav.net/
 .. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)
 .. _Samba: http://www.samba.org/samba/what_is_samba.html
-.. _Torrent Server Documentation: http://www.turnkeylinux.org/docs/torrentserver
+.. _Torrent Server Documentation: https://www.turnkeylinux.org/docs/torrentserver
