@@ -57,11 +57,13 @@ Credentials *(passwords set at first boot)*
 -------------------------------------------
 
 -  Webmin, Webshell, SSH, Samba: username **root**
--  ruTorrent: username **admin**
+-  rTorrent: username **admin**
 -  Web based file manager (SambaDAV):
    -  username **root** (Samba)
 
 .. _TurnKey Core: https://www.turnkeylinux.org/core
+.. _rTorrent: https://en.wikipedia.org/wiki/RTorrent
+.. _SambaDAV: https://github.com/1afa/sambadav
 .. _ClamAV: http://www.clamav.net/
 .. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)
 .. _Samba: http://www.samba.org/samba/what_is_samba.html
