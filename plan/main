@@ -11,3 +11,5 @@ clamdscan
 
 rtorrent
 tmux
+mediainfo
+libav-tools
