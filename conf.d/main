@@ -31,6 +31,8 @@ su - rtorrent -s /bin/bash -c 'mkdir .session'
 
 # configure ruTorrent
 sed -i 's|\(\$scgi_port =\) .*|\1 0;|; s|\(\$scgi_host =\) .*|\1 "unix:///var/run/rtorrent/rpc.socket";|' /var/www/rutorrent/conf/config.php
+sed -i "/curl/ s|> '.*'|> '/usr/bin/curl'|" /var/www/rutorrent/conf/config.php
+sed -i "/ffmpeg/ s|= '.*'|= '/usr/bin/avconv'|" /var/www/rutorrent/plugins/screenshots/conf.php
 
 # configure clamav
 CONF=/etc/clamav/clamd.conf
