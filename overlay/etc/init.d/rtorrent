@@ -20,9 +20,19 @@ delete_socket() {
     fi
 }
 
+create_socket_dir() {
+    SOCKET_DIR=$(dirname "$SOCKET")
+    if [ ! -d "$SOCKET_DIR" ]; then
+        mkdir -p "$SOCKET_DIR"
+        chmod 750 "$SOCKET_DIR"
+        chown $USER:www-data "$SOCKET_DIR"
+    fi
+}
+
 case "$1" in
     start)
         echo "Starting rtorrent."
+        create_socket_dir
         delete_socket
         su - rtorrent -s /bin/bash -c "$TMUX new-session -c $WD -s rtorrent -n rtorrent -d rtorrent"
         if [[ $? -ne 0 ]]; then
