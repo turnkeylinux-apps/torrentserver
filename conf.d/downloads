@@ -7,6 +7,6 @@ dl() {
 
 SRC=/usr/local/src
 VERSION=3.7
-URL="https://dl.bintray.com/novik65/generic/ruTorrent-$VERSION.zip"
+URL="http://dl.bintray.com/novik65/generic/ruTorrent-$VERSION.zip"
 
 dl $URL $SRC
