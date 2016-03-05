@@ -44,8 +44,19 @@ NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
 sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" $CONF
 sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" $CONF
 
-ln -s /etc/nginx/sites-available/rutorrent /etc/nginx/sites-enabled/rutorrent
-rm -f /etc/nginx/sites-enabled/default
+a2dissite 000-default
+a2ensite tkl-webcp
+a2ensite rutorrent
+a2ensite webdavcgi
+
+echo << EOF >> /var/www/rutorrent/conf/plugins.ini
+
+[httprpc]
+enabled = yes
+EOF
+
+echo 'Listen 12322' >> /etc/apache2/ports.conf
+sed -i 's/FILESERVER/TORRENTSERVER/' /var/www/webdavcgi/webdav.conf
 
 # initscript
 update-rc.d rtorrent defaults 99
