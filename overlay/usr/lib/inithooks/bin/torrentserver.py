@@ -45,7 +45,7 @@ def main():
 
     command = ['openssl', 'passwd', '-apr1', password]
 
-    with open('/etc/nginx/htpasswd', 'w') as of:
+    with open('/etc/apache2/htpasswd', 'w') as of:
         of.write('admin:')
         of.flush()
         subprocess.call(command, stdin=PIPE, stdout=of, shell=False)
