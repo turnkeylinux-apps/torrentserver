@@ -8,4 +8,5 @@ NONFREE = yes
 CREDIT_ANCHORTEXT = Torrent Server Appliance
 
 include $(FAB_PATH)/common/mk/turnkey/fileserver.mk
+include $(FAB_PATH)/common/mk/turnkey/php.mk
 include $(FAB_PATH)/common/mk/turnkey.mk
