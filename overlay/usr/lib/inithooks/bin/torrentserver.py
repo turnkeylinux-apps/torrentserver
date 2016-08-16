@@ -1,6 +1,6 @@
 #!/usr/bin/python
 # Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
-"""Configure admin password for ruTorrent
+"""Configure admin password for Transmission
 
 Options:
     -p --pass=    if not provided, will ask interactively
@@ -8,8 +8,9 @@ Options:
 
 import sys
 import getopt
-import subprocess
-from subprocess import PIPE
+from os import system
+from time import sleep
+import json
 
 from dialog_wrapper import Dialog
 
@@ -41,14 +42,16 @@ def main():
         d = Dialog('TurnKey Linux - First boot configuration')
         password = d.get_password(
             "Torrent Server Password",
-            "Enter new admin password for ruTorrent.")
+            "Enter new admin password for Transmission.")
 
-    command = ['openssl', 'passwd', '-apr1', password]
-
-    with open('/etc/nginx/htpasswd', 'w') as of:
-        of.write('admin:')
-        of.flush()
-        subprocess.call(command, stdin=PIPE, stdout=of, shell=False)
+    system('service transmission-daemon stop')
+    with open('/etc/transmission-daemon/settings.json', 'r') as fob:
+        settings = json.load(fob)
+    settings['rpc-username'] = 'admin'
+    settings['rpc-password'] = password
+    with open('/etc/transmission-daemon/settings.json', 'wb') as fob:
+        json.dump(settings, fob)
+    system('service transmission-daemon start')
 
 if __name__ == "__main__":
     main()

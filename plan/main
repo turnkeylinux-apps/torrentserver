@@ -9,7 +9,7 @@ netcat
 clamav-daemon
 clamdscan
 
-rtorrent
+transmission-daemon
 tmux
 mediainfo
 libav-tools

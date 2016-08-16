@@ -2,37 +2,23 @@
 
 STORAGE=/srv/storage
 PASSWORD=turnkey
-SRC=/usr/local/src
-WEBROOT=/var/www/rutorrent
+#SRC=/usr/local/src
+#WEBROOT=/var/www/rutorrent
 
-# extract ruTorrent
-unzip $SRC/ruTorrent-*.zip -d $(dirname $WEBROOT)
-mv $(dirname $WEBROOT)/ruTorrent-master $WEBROOT
-
-# set up rtorrent user
-useradd -MUrd /var/lib/rtorrent -s /bin/false rtorrent
-chown -R rtorrent:rtorrent /var/lib/rtorrent
-
-# set up rtorrent dirs
-usermod -aG users rtorrent
 
 mkdir -p $STORAGE/incoming
 mkdir -p $STORAGE/quarantine
+mkdir -p $STORAGE/download
 
-chown -R rtorrent:users $STORAGE/incoming
-chown -R rtorrent:users $STORAGE/quarantine
-
-chown -R www-data:rtorrent /var/www/rutorrent/share
+chown -R debian-transmission:users $STORAGE/incoming
+chown -R debian-transmission:users $STORAGE/quarantine
+chown -R debian-transmission:users $STORAGE/download
 
 mkdir /var/log/rtorrent
-chown rtorrent:rtorrent /var/log/rtorrent
 
-su - rtorrent -s /bin/bash -c 'mkdir .session'
-
-# configure ruTorrent
-sed -i 's|\(\$scgi_port =\) .*|\1 0;|; s|\(\$scgi_host =\) .*|\1 "unix:///var/run/rtorrent/rpc.socket";|' /var/www/rutorrent/conf/config.php
-sed -i "/curl/ s|> '.*'|> '/usr/bin/curl'|" /var/www/rutorrent/conf/config.php
-sed -i "/ffmpeg/ s|= '.*'|= '/usr/bin/avconv'|" /var/www/rutorrent/plugins/screenshots/conf.php
+# configure transmission
+CONF=/etc/transmission-daemon/settings.json
+sed -i 's|"download-dir": .*|"download-dir": "\/srv\/storage\/download",|' $CONF
 
 # configure clamav
 CONF=/etc/clamav/clamd.conf
@@ -44,8 +30,8 @@ NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
 sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" $CONF
 sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" $CONF
 
-ln -s /etc/nginx/sites-available/rutorrent /etc/nginx/sites-enabled/rutorrent
+ln -s /etc/nginx/sites-available/transmission /etc/nginx/sites-enabled/transmission
 rm -f /etc/nginx/sites-enabled/default
 
 # initscript
-update-rc.d rtorrent defaults 99
+update-rc.d transmission-daemon defaults 99

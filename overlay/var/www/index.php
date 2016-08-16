@@ -35,7 +35,7 @@
                     <div>
                         <a href="https://<?php print
                         $_SERVER{'HTTP_HOST'}; ?>:12322"><img
-                        src="images/download.png"/>ruTorrent</a>
+                        src="images/download.png"/>Transmission</a>
                     </div>
                     <div>
                         <a href="https://<?php print
