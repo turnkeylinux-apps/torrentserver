@@ -16,7 +16,7 @@ and on top of that:
   formats.
 - E-mail download completion notification via Postfix MTA (bound to
   localhost).
-- File sharing (`rTorrent`_) configurations:
+- File sharing (`Transmission`_) configurations:
    
    - Anti-virus / malware scanning via `ClamAV`_.
       
@@ -47,12 +47,6 @@ and on top of that:
 See the `Torrent Server Documentation`_ for more details, including
 configuration details if behind a Firewall/Router/NAT
 
-Known issues
-------------
-
-- rTorrent will shut down if free disk space reaches the threshold of
-  100MB
-
 Credentials *(passwords set at first boot)*
 -------------------------------------------
 
@@ -62,7 +56,7 @@ Credentials *(passwords set at first boot)*
    -  username **root** (Samba)
 
 .. _TurnKey Core: https://www.turnkeylinux.org/core
-.. _rTorrent: https://en.wikipedia.org/wiki/RTorrent
+.. _Transmission: https://en.wikipedia.org/wiki/Transmission_(BitTorrent_client)
 .. _SambaDAV: https://github.com/1afa/sambadav
 .. _ClamAV: http://www.clamav.net/
 .. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)
