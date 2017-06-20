@@ -30,8 +30,9 @@ NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
 sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" $CONF
 sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" $CONF
 
-ln -s /etc/nginx/sites-available/transmission /etc/nginx/sites-enabled/transmission
-rm -f /etc/nginx/sites-enabled/default
+a2dissite 000-default
+a2ensite tkl-webcp
+a2ensite webdavcgi
 
 # initscript
 update-rc.d transmission-daemon defaults 99

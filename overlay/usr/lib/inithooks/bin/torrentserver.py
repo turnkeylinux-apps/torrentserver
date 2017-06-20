@@ -1,5 +1,6 @@
 #!/usr/bin/python
 # Copyright (c) 2010 Alon Swartz <alon@turnkeylinux.org> - all rights reserved
+# Updated 2016 by Anton Pyrogovskyi <anton@turnkeylinux.org>
 """Configure admin password for Transmission
 
 Options:

@@ -1,3 +1,15 @@
+turnkey-torrentserver-14.2 (1) turnkey; urgency=low
+
+  * Torrent Server:
+
+    - Replaced rTorrent with Transmission
+    - Changed webserver from nginx to Apache for WebDAV support (#563).
+
+  * Note: Please refer to turnkey-core's changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Ken Robinson <ken@turnkeylinux.org>  Tue, 20 Jun 2017 19:37:32 -0400
+
 turnkey-torrentserver-14.1 (1) turnkey; urgency=low
 
   * Added adtional dependencies and adjusted config so no longer complains 
