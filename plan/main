@@ -13,3 +13,10 @@ transmission-daemon
 tmux
 mediainfo
 libav-tools
+
+apache2
+apache2-mpm-prefork
+libapache2-mod-php5
+
+webmin-apache
+webmin-phpini
