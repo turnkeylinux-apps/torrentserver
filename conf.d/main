@@ -2,9 +2,6 @@
 
 STORAGE=/srv/storage
 PASSWORD=turnkey
-#SRC=/usr/local/src
-#WEBROOT=/var/www/rutorrent
-
 
 mkdir -p $STORAGE/incoming
 mkdir -p $STORAGE/quarantine
@@ -30,9 +27,16 @@ NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
 sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" $CONF
 sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" $CONF
 
+# Rename the file server for WebDAVCGI
+sed -i 's/FILESERVER/TORRENTSERVER/' /var/www/webdavcgi/webdav.conf
+
+# Apache config
+echo 'Listen 12322' >> /etc/apache2/ports.conf
+
 a2dissite 000-default
 a2ensite tkl-webcp
 a2ensite webdavcgi
+a2ensite transmission
 
 # initscript
 update-rc.d transmission-daemon defaults 99
