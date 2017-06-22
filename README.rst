@@ -37,7 +37,7 @@ and on top of that:
       - Public storage.
       - CD-ROM with automount and umount hooks (/media/cdrom).
 
-- Access your files securely from anywhere via `SambaDAV`_:
+- Access your files securely from anywhere via `WebDAVCGI`_:
    
    - DAV service running via HTTPS.
    - Pre-configured repositories (storage, user home directory).
@@ -57,7 +57,7 @@ Credentials *(passwords set at first boot)*
 
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Transmission: https://en.wikipedia.org/wiki/Transmission_(BitTorrent_client)
-.. _SambaDAV: https://github.com/1afa/sambadav
+.. _WebDAVCGI: https://github.com/DanRohde/webdavcgi
 .. _ClamAV: http://www.clamav.net/
 .. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)
 .. _Samba: http://www.samba.org/samba/what_is_samba.html
