@@ -37,12 +37,16 @@ and on top of that:
       - Public storage.
       - CD-ROM with automount and umount hooks (/media/cdrom).
 
-- Access your files securely from anywhere via `WebDAVCGI`_:
+- Access your files securely from anywhere via `WebDAV CGI`_:
    
    - DAV service running via HTTPS.
    - Pre-configured repositories (storage, user home directory).
 
--  Default storage directory: */srv/storage*
+- Default storage directory: */srv/storage*
+- Accessing file server via samba on the command line::
+
+    smbclient //1.0.0.61/storage -Uroot
+        mount -t cifs //1.0.0.61/storage /mnt -o username=root,password=PASSWORD
 
 See the `Torrent Server Documentation`_ for more details, including
 configuration details if behind a Firewall/Router/NAT
@@ -51,13 +55,13 @@ Credentials *(passwords set at first boot)*
 -------------------------------------------
 
 -  Webmin, Webshell, SSH, Samba: username **root**
--  rTorrent: username **admin**
--  Web based file manager (SambaDAV):
-   -  username **root** (Samba)
+-  Transmission: username **admin**
+-  Web based file manager (WebDAV CGI):
+   -  username **root** (or Samba users)
 
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Transmission: https://en.wikipedia.org/wiki/Transmission_(BitTorrent_client)
-.. _WebDAVCGI: https://github.com/DanRohde/webdavcgi
+.. _WebDAV CGI: https://github.com/DanRohde/webdavcgi
 .. _ClamAV: http://www.clamav.net/
 .. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)
 .. _Samba: http://www.samba.org/samba/what_is_samba.html
