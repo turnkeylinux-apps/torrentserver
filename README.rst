@@ -28,14 +28,25 @@ and on top of that:
    
    - Preconfigured wordgroup: WORKGROUP
    - Preconfigured netbios name: TORRENTSERVER
-   - Configured Samba and UNIX users/groups synchronization (CLI and
-     Webmin).
    - Configured root as administrative samba user.
    - Configured shares:
       
       - Users home directory.
       - Public storage.
       - CD-ROM with automount and umount hooks (/media/cdrom).
+
+    - NOTE: Due to the removal of libpam-smbpass (see `issue #1188`_), new Samba
+      users must have their passwords explictly set separately when created.
+      However, if you create a Samba user using smbpasswd, then a new Linux user
+      of the same name, with the same password is automatically created
+      (including home directory). E.g.::
+
+        # smbpasswd -a new_user
+        New SMB password:
+        Retype new SMB password:
+        Added user new_user.
+        # ls /home/
+        new_user
 
 - Access your files securely from anywhere via `WebDAV CGI`_:
    
@@ -62,7 +73,8 @@ Credentials *(passwords set at first boot)*
 .. _TurnKey Core: https://www.turnkeylinux.org/core
 .. _Transmission: https://en.wikipedia.org/wiki/Transmission_(BitTorrent_client)
 .. _WebDAV CGI: https://github.com/DanRohde/webdavcgi
-.. _ClamAV: http://www.clamav.net/
-.. _BitTorrent: http://en.wikipedia.org/wiki/BitTorrent_(protocol)
-.. _Samba: http://www.samba.org/samba/what_is_samba.html
+.. _ClamAV: https://www.clamav.net/
+.. _BitTorrent: https://en.wikipedia.org/wiki/BitTorrent_(protocol)
+.. _Samba: https://www.samba.org/samba/what_is_samba.html
+.. _issue #1188: https://github.com/turnkeylinux/tracker/issues/1188
 .. _Torrent Server Documentation: https://www.turnkeylinux.org/docs/torrentserver
