@@ -12,7 +12,7 @@ clamdscan
 transmission-daemon
 tmux
 mediainfo
-libav-tools
+ffmpeg
 
 apache2
 libapache2-mod-php
