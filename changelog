@@ -1,5 +1,8 @@
 turnkey-torrentserver-16.0 (1) turnkey; urgency=low
 
+  * Update Transmission to latest Debian package - v2.94 (2.94-2). Closes
+    #1376.
+
   * Update WebDAV CGI from upstream.
     [ Jeremy Davis ]
 
