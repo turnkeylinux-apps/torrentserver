@@ -34,7 +34,6 @@ sed -i 's/FILESERVER/TORRENTSERVER/' /var/www/webdavcgi/webdav.conf
 echo 'Listen 12322' >> /etc/apache2/ports.conf
 
 a2enmod proxy_http
-
 a2dissite 000-default
 a2ensite tkl-webcp
 a2ensite webdavcgi
