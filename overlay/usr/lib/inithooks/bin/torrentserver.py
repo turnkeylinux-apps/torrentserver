@@ -13,7 +13,7 @@ import subprocess
 from time import sleep
 import json
 
-from dialog_wrapper import Dialog
+from libinithooks.dialog_wrapper import Dialog
 
 def fatal(s):
     print("Error:", s, file=sys.stderr)
