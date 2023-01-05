@@ -16,7 +16,7 @@ and on top of that:
   formats.
 - E-mail download completion notification via Postfix MTA (bound to
   localhost).
-- File sharing (`Transmission`_) configurations:
+- File sharing (`Transmission`_) configuration:
    
    - Anti-virus / malware scanning via `ClamAV`_.
       
@@ -24,10 +24,10 @@ and on top of that:
       - Automatically quarantines unsafe downloads.
       - Anti-virus logfile: */var/log/rtorrent/clamav.log*
 
-- File server (`Samba`_) configurations:
+- File server (`Samba`_) configuration:
    
-   - Preconfigured wordgroup: WORKGROUP
-   - Preconfigured netbios name: TORRENTSERVER
+   - Pre-configured workgroup: WORKGROUP
+   - Pre-configured netbios name: TORRENTSERVER
    - Configured root as administrative samba user.
    - Configured shares:
       
