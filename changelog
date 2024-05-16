@@ -1,3 +1,12 @@
+turnkey-torrentserver-18.0 (1) turnkey; urgency=low
+
+  * Updated all relevant Debian packages to Bookworm/12 versions
+
+  * Note: Please refer to turnkey-core's 18.0 changelog for changes common to all
+    appliances. Here we only describe changes specific to this appliance.
+
+ -- Anton Pyrogovskyi <anton@turnkeylinux.org>  Thu, 16 May 2024 15:23:38 +0200
+
 turnkey-torrentserver-17.1 (1) turnkey; urgency=low
 
   * Updated all Debian packages to latest.
