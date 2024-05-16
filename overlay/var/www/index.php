@@ -7,7 +7,7 @@
         <meta http-equiv="Content-Script-Type" content="text/javascript">
 
         <title>TurnKey Torrent Server</title>
-        
+
         <link rel="stylesheet" href="css/ui.tabs.css" type="text/css" media="print, projection, screen">
         <link rel="stylesheet" href="css/base.css" type="text/css">
 
@@ -23,7 +23,7 @@
 
     <body>
         <h1>TurnKey Torrent Server</h1>
-        
+
         <div id="container-1">
             <ul>
                 <li><a href="#cp"><span>Control Panel</span></a></li>
@@ -34,22 +34,22 @@
                 <div class="fragment-content">
                     <div>
                         <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>:12322"><img
+                        $_SERVER['HTTP_HOST']; ?>:12322"><img
                         src="images/download.png"/>Transmission</a>
                     </div>
                     <div>
                         <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>:12320"><img
+                        $_SERVER['HTTP_HOST']; ?>:12320"><img
                         src="images/shell.png"/>Web Shell</a>
                     </div>
                     <div>
                         <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>:12321"><img
+                        $_SERVER['HTTP_HOST']; ?>:12321"><img
                         src="images/webmin.png"/>Webmin</a>
                     </div>
                     <div>
                         <a href="https://<?php print
-                        $_SERVER{'HTTP_HOST'}; ?>/"><img
+                        $_SERVER['HTTP_HOST']; ?>/"><img
                         src="images/filemanager.png"/>File Manager</a>
                     </div>
                     <div></div>
