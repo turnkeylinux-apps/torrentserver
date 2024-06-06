@@ -1,6 +1,5 @@
 Control panel: http://$ipaddr
 File manager:  https://$ipaddr
-Web shell:     https://$ipaddr:12320
 Webmin:        https://$ipaddr:12321
 Transmission:  https://$ipaddr:12322
 SMB/CIFS:      \\$ipaddr (ports 139/445)
