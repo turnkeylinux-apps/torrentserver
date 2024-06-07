@@ -7,7 +7,7 @@
         <meta http-equiv="Content-Script-Type" content="text/javascript">
 
         <title>TurnKey Torrent Server</title>
-        
+
         <link rel="stylesheet" href="css/ui.tabs.css" type="text/css" media="print, projection, screen">
         <link rel="stylesheet" href="css/base.css" type="text/css">
 
@@ -23,7 +23,7 @@
 
     <body>
         <h1>TurnKey Torrent Server</h1>
-        
+
         <div id="container-1">
             <ul>
                 <li><a href="#cp"><span>Control Panel</span></a></li>
@@ -52,7 +52,10 @@
 
                     <h2>Resources and references</h2>
                     <ul>
-                        <li>TurnKey Torrent Server <a href="https://www.turnkeylinux.org/torrentserver">release notes</a> and <a href="https://www.turnkeylinux.org/docs/torrentserver">documentation</a></li>
+                        <li>TurnKey Torrent Server <a href="https://www.turnkeylinux.org/torrentserver">release notes</a>
+                            and <a href="https://www.turnkeylinux.org/docs/torrentserver">documentation</a></li>
+                        <li><a href="https://github.com/transmission/transmission/blob/main/docs/Web-Interface.md#web-interface-overview">
+                            Transmission WebUI Overview</a></li>
                         <li>Wikipedia: <a href="http://en.wikipedia.org/wiki/BitTorrent_(protocol)">BitTorrent</a> 
                     </ul>
                 </div>
