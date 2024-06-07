@@ -52,7 +52,10 @@
 
                     <h2>Resources and references</h2>
                     <ul>
-                        <li>TurnKey Torrent Server <a href="https://www.turnkeylinux.org/torrentserver">release notes</a> and <a href="https://www.turnkeylinux.org/docs/torrentserver">documentation</a></li>
+                        <li>TurnKey Torrent Server <a href="https://www.turnkeylinux.org/torrentserver">release notes</a>
+                            and <a href="https://www.turnkeylinux.org/docs/torrentserver">documentation</a></li>
+                        <li><a href="https://github.com/transmission/transmission/blob/main/docs/Web-Interface.md#web-interface-overview">
+                            Transmission WebUI Overview</a></li>
                         <li>Wikipedia: <a href="http://en.wikipedia.org/wiki/BitTorrent_(protocol)">BitTorrent</a> 
                     </ul>
                 </div>
