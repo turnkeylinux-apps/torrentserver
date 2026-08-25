@@ -1,3 +1,40 @@
 #!/bin/bash
 
-clamdscan -v --stdout --move /srv/storage/quarantine $1 >> /var/log/rtorrent/clamav.log
+set -u
+
+QUARANTINE=/srv/storage/quarantine
+LOG=/var/log/transmission/clamav.log
+TORRENT_DIR=${TR_TORRENT_DIR:?Transmission did not provide TR_TORRENT_DIR}
+TORRENT_NAME=${TR_TORRENT_NAME:?Transmission did not provide TR_TORRENT_NAME}
+TARGET=$(realpath -e -- "$TORRENT_DIR/$TORRENT_NAME") || exit 2
+
+case "$TARGET" in
+    /srv/storage/*) ;;
+    *)
+        echo "Refusing to scan outside /srv/storage: $TARGET" >&2
+        exit 2
+        ;;
+esac
+
+exec >> "$LOG" 2>&1
+echo "$(date --iso-8601=seconds) scanning $TARGET"
+
+clamdscan --fdpass --multiscan --verbose --move="$QUARANTINE" "$TARGET"
+scan_status=$?
+
+case "$scan_status" in
+    0) result=clean ;;
+    1) result=quarantined ;;
+    *) result=scan-error ;;
+esac
+
+if command -v sendmail >/dev/null; then
+    {
+        echo "To: root"
+        echo "Subject: Transmission download $result: $TORRENT_NAME"
+        echo
+        echo "Transmission completed $TORRENT_NAME. ClamAV result: $result."
+    } | sendmail -t
+fi
+
+exit "$scan_status"

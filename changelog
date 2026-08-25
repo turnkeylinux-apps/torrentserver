@@ -1,3 +1,13 @@
+turnkey-torrentserver-19.0 (1) turnkey; urgency=low
+
+  * Update the appliance to Debian 13/Trixie and Debian's Transmission 4.1
+    package series.
+  * Keep Transmission credentials out of process arguments and configure its
+    authenticated RPC, storage, completion scan, and peer port explicitly.
+  * Replace stale rTorrent service residue with a Transmission lifecycle test.
+
+ -- TurnKey Linux release engineering <release@turnkeylinux.org>  Tue, 25 Aug 2026 00:00:00 +0000
+
 turnkey-torrentserver-18.0 (1) turnkey; urgency=low
 
   * Add wsdd package for Windows Service for Devices - so Fileserver shows up

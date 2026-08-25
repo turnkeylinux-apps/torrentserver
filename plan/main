@@ -4,10 +4,11 @@
 netcat-openbsd
 
 clamav-daemon
+clamav-freshclam
 clamdscan
 
 transmission-daemon
-tmux
+transmission-cli
 mediainfo
 ffmpeg
 
