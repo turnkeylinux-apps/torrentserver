@@ -14,9 +14,24 @@ require_contains() {
     [[ $text == *"$expected"* ]] || fail "$context did not contain: $expected"
 }
 
-for service in transmission-daemon apache2 smbd clamav-daemon postfix; do
+if ! systemctl is-active --quiet clamav-freshclam; then
+    systemctl restart clamav-freshclam \
+        || fail "clamav-freshclam did not restart after runtime CA setup"
+fi
+
+for service in transmission-daemon apache2 smbd clamav-freshclam postfix; do
     systemctl is-active --quiet "$service" || fail "$service is not active"
 done
+systemctl is-enabled --quiet clamav-daemon.path \
+    || fail "ClamAV database watcher is not enabled"
+systemctl is-active --quiet clamav-daemon.path \
+    || fail "ClamAV database watcher is not active"
+for _ in $(seq 1 300); do
+    systemctl is-active --quiet clamav-daemon && break
+    sleep 1
+done
+systemctl is-active --quiet clamav-daemon \
+    || fail "clamav-daemon did not start after the initial signature download"
 apache2ctl configtest 2>&1 | grep -q 'Syntax OK' \
     || fail "Apache configuration is invalid"
 
@@ -151,6 +166,7 @@ smbclient //127.0.0.1/storage --authentication-file="$samba_auth" \
     >/dev/null
 cmp "$fixture_source" "$fixture_copy" || fail "Samba file round trip changed content"
 
+apt-get update >/dev/null
 policy=$(apt-cache policy transmission-daemon)
 candidate=$(awk '/Candidate:/ {print $2}' <<< "$policy")
 [[ -n $candidate && $candidate != '(none)' ]] || fail "APT has no Transmission candidate"
@@ -163,8 +179,8 @@ cat > "$TKL_TEST_RESULT" <<EOF
 package_source=Debian Trixie transmission packages
 installed_version=transmission-daemon $installed_version
 runtime_checks=authenticated RPC local torrent create add verify read remove, HTTPS web UI, Samba file round trip, storage, ClamAV hook and service supervision passed
-updater_command=apt-cache policy transmission-daemon; apt-get --simulate --only-upgrade install transmission-daemon transmission-common transmission-cli
-updater_result=APT selected candidate $candidate and the non-mutating upgrade simulation passed
+updater_command=apt-get update; apt-cache policy transmission-daemon; apt-get --simulate --only-upgrade install transmission-daemon transmission-common transmission-cli
+updater_result=APT authenticated current metadata, selected candidate $candidate, and the non-mutating upgrade simulation passed
 updater_channel=Debian Trixie signed package repositories
 integrity_evidence=installed dpkg state and APT policy bind Transmission to signed Debian Trixie metadata
 EOF

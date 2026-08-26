@@ -47,6 +47,7 @@ chmod 0660 "$CONF"
 # configure clamav
 CONF=/etc/clamav/clamd.conf
 sed -i 's|\(ScanMail\) true|\1 false|; s|\(LogSyslog\) false|\1 true|' "$CONF"
+/usr/bin/systemctl enable clamav-freshclam.service clamav-daemon.path
 
 # configure samba
 CONF=/etc/samba/smb.conf
