@@ -1,0 +1,11 @@
+[Unit]
+Description=Start ClamAV daemon after the initial signature download
+Documentation=man:systemd.path(5)
+Before=clamav-freshclam.service
+
+[Path]
+PathChanged=/var/lib/clamav
+Unit=clamav-daemon.service
+
+[Install]
+WantedBy=multi-user.target

@@ -3,6 +3,8 @@
 
 . /etc/default/inithooks
 
-[ -e $INITHOOKS_CONF ] && . $INITHOOKS_CONF
-$INITHOOKS_PATH/bin/torrentserver.py --pass="$APP_PASS"
-
+set +x
+[ -e "$INITHOOKS_CONF" ] && . "$INITHOOKS_CONF"
+printf '%s' "$APP_PASS" | "$INITHOOKS_PATH/bin/torrentserver.py" --pass-stdin
+unset APP_PASS
+set -x

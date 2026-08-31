@@ -1,31 +1,59 @@
-#!/bin/sh -ex
+#!/bin/bash -e
+
+set -x
 
 STORAGE=/srv/storage
-PASSWORD=turnkey
+install -d -o debian-transmission -g users -m 2770 \
+    "$STORAGE/incoming" "$STORAGE/quarantine" "$STORAGE/download"
+install -d -o debian-transmission -g users -m 0750 /var/log/transmission
 
-mkdir -p $STORAGE/incoming
-mkdir -p $STORAGE/quarantine
-mkdir -p $STORAGE/download
-
-chown -R debian-transmission:users $STORAGE/incoming
-chown -R debian-transmission:users $STORAGE/quarantine
-chown -R debian-transmission:users $STORAGE/download
-
-mkdir /var/log/rtorrent
+# Permit the completion hook to submit files to clamd and let clamd read the
+# shared storage tree after the next service start.
+adduser debian-transmission clamav
+adduser clamav users
 
 # configure transmission
 CONF=/etc/transmission-daemon/settings.json
-sed -i 's|"download-dir": .*|"download-dir": "\/srv\/storage\/download",|' $CONF
+service transmission-daemon stop || true
+python3 - "$CONF" <<'PY'
+import json
+import sys
+
+path = sys.argv[1]
+with open(path, encoding='utf-8') as settings_file:
+    settings = json.load(settings_file)
+
+settings.update({
+    'download-dir': '/srv/storage/download',
+    'incomplete-dir': '/srv/storage/incoming',
+    'incomplete-dir-enabled': True,
+    'peer-port': 6882,
+    'rpc-authentication-required': True,
+    'rpc-bind-address': '127.0.0.1',
+    'rpc-username': 'admin',
+    'rpc-whitelist': '127.0.0.1,::1',
+    'rpc-whitelist-enabled': True,
+    'script-torrent-done-enabled': True,
+    'script-torrent-done-filename': '/usr/local/bin/clamav-scan',
+})
+
+with open(path, 'w', encoding='utf-8') as settings_file:
+    json.dump(settings, settings_file, indent=4, sort_keys=True)
+    settings_file.write('\n')
+PY
+chown debian-transmission:debian-transmission "$CONF"
+chmod 0660 "$CONF"
 
 # configure clamav
 CONF=/etc/clamav/clamd.conf
-sed -i 's|\(ScanMail\) true|\1 false|; s|\(LogSyslog\) false|\1 true|' $CONF
+sed -i 's|\(ScanMail\) true|\1 false|; s|\(LogSyslog\) false|\1 true|' "$CONF"
+/usr/bin/systemctl enable clamav-freshclam.service clamav-daemon.path
 
 # configure samba
 CONF=/etc/samba/smb.conf
-NETBIOS_NAME=$(echo $HOSTNAME | tr [a-z] [A-Z])
-sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" $CONF
-sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" $CONF
+NETBIOS_NAME=${HOSTNAME^^}
+sed -i "s|\(netbios name =\) \(.*\)|\1 $NETBIOS_NAME|" "$CONF"
+sed -i "s|\(server string =\) \(.*\)|\1 $CREDIT_ANCHORTEXT|" "$CONF"
 
 # Rename the file server for WebDAVCGI
 sed -i 's/FILESERVER/TORRENTSERVER/' /var/www/webdavcgi/webdav.conf
@@ -38,6 +66,3 @@ a2dissite 000-default
 a2ensite tkl-webcp
 a2ensite webdavcgi
 a2ensite transmission
-
-# initscript
-update-rc.d transmission-daemon defaults 99

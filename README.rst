@@ -16,13 +16,17 @@ and on top of that:
   formats.
 - E-mail download completion notification via Postfix MTA (bound to
   localhost).
-- File sharing (`Transmission`_) configuration:
+- Download server (`Transmission`_) configuration:
+
+   - Authenticated web interface and RPC endpoint on HTTPS port 12322.
+   - Downloads stored in */srv/storage/download* with incomplete data in
+     */srv/storage/incoming*.
    
    - Anti-virus / malware scanning via `ClamAV`_.
       
       - Anti-virus signatures are auto-updated.
       - Automatically quarantines unsafe downloads.
-      - Anti-virus logfile: */var/log/rtorrent/clamav.log*
+      - Anti-virus logfile: */var/log/transmission/clamav.log*
 
 - File server (`Samba`_) configuration:
    
@@ -65,7 +69,7 @@ configuration details if behind a Firewall/Router/NAT
 Credentials *(passwords set at first boot)*
 -------------------------------------------
 
--  Webmin, Webshell, SSH, Samba: username **root**
+-  Webmin, SSH, Samba: username **root**
 -  Transmission: username **admin**
 -  Web based file manager (WebDAV CGI):
    -  username **root** (or Samba users)
